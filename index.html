@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My chat</title>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+	.chat-app {
+		padding: 20px;
+		margin: 20px;
+	}
+
+	.chat-window {
+		border: 1px solid #eee;
+	}
+
+	.chat-window .message {
+		padding: 10px;
+	}
+
+</style>
+</head>
+<body>
+
+<div><h1>Chat app</h1></div>
+<div class="chat-app">
+	<div class="chat-window">
+		<div class="message">cao</div>
+		<div class="message">Sta ima?</div>
+		<div class="message">Kako si?</div>
+	</div>
+	<input id="chat-massage" type="text" name="input">
+	<button id="btn-send" class="btn btn-primary">Send</button>
+</div>
+
+<script type="text/javascript">
+
+	var connection = new WebSocket('ws://localhost:8080');
+
+	connection.onopen = function(){
+  		console.log('Connection open!');
+	}
+
+	connection.onclose = function(){
+   		console.log('Connection closed');
+	}
+
+	$('#btn-send').click(function(){
+		var message = $('#chat-massage').val();
+		connection.send(message);
+	});
+
+	connection.onmessage = function(e){
+   		var server_message = e.data;
+   		var newMessageElement = '<div class="message">' + server_message + '</div>';
+   		$('.chat-window .message').last().after(newMessageElement);
+   	}
+   		
+
+
+
+</script>
+
+</body>
+</html>
